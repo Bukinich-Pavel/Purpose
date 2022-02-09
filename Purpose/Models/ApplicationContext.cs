@@ -9,6 +9,7 @@ namespace Purpose.Models
         public DbSet<Item> items { get; set; }
         public DbSet<ItemLike> itemsLike { get; set; }
         public DbSet<Comment> comments { get; set; }
+        public DbSet<User> users { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
             Database.EnsureCreated();
