@@ -67,6 +67,7 @@ namespace Purpose.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, false);  // установка куки
+                    Response.StatusCode = 200;
                     return user;
                 }
             }
