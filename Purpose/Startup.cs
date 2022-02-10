@@ -24,6 +24,8 @@ namespace Purpose
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(); // добавляем сервисы CORS
+
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -42,6 +44,8 @@ namespace Purpose
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder.AllowAnyOrigin());  // подключаем CORS
 
             app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
