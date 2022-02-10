@@ -21,7 +21,7 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        public async Task<User> Login(LoginViewModel model)
+        public async Task<User> Login([FromBody] LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -47,7 +47,7 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        public async Task<StatusCodeResult> Register(RegisterViewModel model)
+        public async Task<StatusCodeResult> Register([FromBody] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
