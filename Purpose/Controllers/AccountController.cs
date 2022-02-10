@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Purpose.Models;
 using Purpose.ViewModels;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -20,25 +21,24 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<StatusCodeResult> Login(LoginViewModel model)
+        public async Task<User> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
                 if (result.Succeeded)
                 {
-                    
-                    //Response.Body = 
-                    return new OkResult();
+                    var user = await userManager.FindByEmailAsync(model.Email);
+                    Response.StatusCode = 200;
+                    return user;
                 }
             }
-            return new BadRequestResult();
+            Response.StatusCode = 401;
+            return null;
         }
 
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<StatusCodeResult> Logout()
         {
             await signInManager.SignOutAsync();  // удаляем аутентификационные куки
@@ -51,14 +51,16 @@ namespace Purpose.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userName = model.Email.Substring(model.Email.IndexOf('@'));
+                var nickName = model.Email.Substring(0, model.Email.IndexOf('@') + 1);
+
                 User user = new User
                 {
                     Email = model.Email,
-                    UserName = userName,
+                    UserName = model.Email,
                     FirstName = model.FirstName,
                     SecondName = model.SecondName,
-                    Year = model.Year
+                    Year = model.Year,
+                    NickName = model.NickName == String.Empty ? nickName : model.NickName
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);  // добавляем пользователя

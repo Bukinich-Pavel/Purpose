@@ -11,7 +11,7 @@ namespace Purpose.ViewModels
 
         [Required]
         [StringLength(20)]
-        public string UserName { get; set; }
+        public string NickName { get; set; }
 
         [Required]
         [StringLength(20)]
