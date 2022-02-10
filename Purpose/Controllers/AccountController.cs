@@ -47,7 +47,7 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        public async Task<StatusCodeResult> Register([FromBody] RegisterViewModel model)
+        public async Task<User> Register([FromBody] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -67,10 +67,11 @@ namespace Purpose.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, false);  // установка куки
-                    return new OkResult();
+                    return user;
                 }
             }
-            return new BadRequestResult();
+            Response.StatusCode = 401;
+            return null;
         }
     }
 }
