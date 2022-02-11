@@ -21,7 +21,7 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        public async Task<UserFrontViewModel> Login([FromBody] LoginViewModel model)
+        public async Task<JsonResult> Login([FromBody] LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -30,7 +30,7 @@ namespace Purpose.Controllers
                 {
                     var user = await userManager.FindByEmailAsync(model.Email);
                     Response.StatusCode = 200;
-                    return new UserFrontViewModel(user);
+                    return Json(new UserFrontViewModel(user));
                 }
             }
             Response.StatusCode = 401;
@@ -47,7 +47,7 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        public async Task<UserFrontViewModel> Register([FromBody] RegisterViewModel model)
+        public async Task<JsonResult> Register([FromBody] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -60,19 +60,25 @@ namespace Purpose.Controllers
                     FirstName = model.FirstName,
                     SecondName = model.SecondName,
                     Year = model.Year,
-                    NickName = model.NickName == String.Empty ? nickName : model.NickName
+                    NickName = model.NickName == String.Empty ? nickName : model.NickName,
+                    Photo = model.Photo
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);  // добавляем пользователя
+                
                 if (result.Succeeded)
                 {
-                    //await signInManager.SignInAsync(user, false);  // установка куки
+                    await signInManager.SignInAsync(user, false);  // установка куки
                     Response.StatusCode = 200;
-                    return new UserFrontViewModel(user);
+                    return Json(new UserFrontViewModel(user));
                 }
+                Response.StatusCode = 401;
+                return Json(result.Errors);
             }
+
             Response.StatusCode = 401;
-            return null;
+            return Json(ModelState.Values);
+
         }
     }
 }

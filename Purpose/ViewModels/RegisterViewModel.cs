@@ -34,5 +34,7 @@ namespace Purpose.ViewModels
         [Compare("Password")]
         [DataType(DataType.Password)]
         public string PasswordConfirm { get; set; }
+
+        public string Photo { get; set; }
     }
 }

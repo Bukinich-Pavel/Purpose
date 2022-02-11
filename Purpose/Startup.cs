@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Purpose.Models;
+using Purpose.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,13 +25,16 @@ namespace Purpose
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddCors(); // добавляем сервисы CORS
+            services.AddSignalR();
 
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationContext>();
+            services.AddIdentity<User, IdentityRole>(opts =>
+            {
+                opts.Password.RequireNonAlphanumeric = false;
+            })
+            .AddEntityFrameworkStores<ApplicationContext>();
 
             services.AddControllers();
         }
@@ -52,6 +56,8 @@ namespace Purpose
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chat");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

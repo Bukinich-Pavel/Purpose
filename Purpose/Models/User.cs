@@ -8,6 +8,7 @@ namespace Purpose.Models
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public int? Year { get; set; }
+        public string Photo { get; set; }
 
     }
 }
