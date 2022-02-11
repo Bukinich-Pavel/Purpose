@@ -70,10 +70,13 @@ namespace Purpose.Controllers
                 {
                     await signInManager.SignInAsync(user, false);  // установка куки
                     Response.StatusCode = 200;
-                    return Json(new UserFrontViewModel(user));
+                    return Json(new ResponseViewModel(new UserFrontViewModel(user)));
+                    //return Json(new UserFrontViewModel(user));
                 }
                 Response.StatusCode = 401;
-                return Json(result.Errors);
+                var respose = new ResponseViewModel(result.Errors);
+                return Json(respose);
+                //return Json(result.Errors);
             }
 
             Response.StatusCode = 401;
