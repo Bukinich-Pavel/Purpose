@@ -21,7 +21,7 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        public async Task<User> Login([FromBody] LoginViewModel model)
+        public async Task<UserFrontViewModel> Login([FromBody] LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -30,7 +30,7 @@ namespace Purpose.Controllers
                 {
                     var user = await userManager.FindByEmailAsync(model.Email);
                     Response.StatusCode = 200;
-                    return user;
+                    return new UserFrontViewModel(user);
                 }
             }
             Response.StatusCode = 401;
@@ -47,7 +47,7 @@ namespace Purpose.Controllers
 
 
         [HttpPost]
-        public async Task<User> Register([FromBody] RegisterViewModel model)
+        public async Task<UserFrontViewModel> Register([FromBody] RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -66,9 +66,9 @@ namespace Purpose.Controllers
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);  // добавляем пользователя
                 if (result.Succeeded)
                 {
-                    await signInManager.SignInAsync(user, false);  // установка куки
+                    //await signInManager.SignInAsync(user, false);  // установка куки
                     Response.StatusCode = 200;
-                    return user;
+                    return new UserFrontViewModel(user);
                 }
             }
             Response.StatusCode = 401;
