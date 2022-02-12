@@ -25,6 +25,8 @@ namespace Purpose
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+
             services.AddSignalR();
 
             services.AddDbContext<ApplicationContext>(options =>
@@ -49,7 +51,7 @@ namespace Purpose
 
             app.UseRouting();
 
-            //app.UseCors(builder => builder.AllowAnyOrigin());  // подключаем CORS
+            app.UseCors(builder => builder.AllowAnyOrigin());  // подключаем CORS
 
             app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();

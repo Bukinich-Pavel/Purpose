@@ -18,6 +18,10 @@ namespace Purpose.Controllers
         //[Authorize]
         public IActionResult Index()
         {
+            foreach (var item in User.Identities)
+            {
+                item.
+            }
             if (User.Identity.IsAuthenticated)
             {
                 return Content(User.Identity.Name);
