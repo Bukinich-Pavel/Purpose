@@ -27,7 +27,7 @@ namespace Purpose.Controllers
             if (ModelState.IsValid) // Valid Ok
             {
                 // Searche user and password chek
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
+                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, true, false);
                 if (result.Succeeded) // is Ok
                 {
                     // Searche user in DB
@@ -51,7 +51,7 @@ namespace Purpose.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         public async Task<StatusCodeResult> Logout()
         {
             await signInManager.SignOutAsync();  // Delete cookie
