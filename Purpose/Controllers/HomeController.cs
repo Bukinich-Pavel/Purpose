@@ -2,6 +2,7 @@
 using Purpose.Models;
 using Purpose.Cloud;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Purpose.Controllers
 {
@@ -12,20 +13,16 @@ namespace Purpose.Controllers
         {
             this.db = db;
         }
-        public string Index()
+
+        [HttpGet]
+        //[Authorize]
+        public IActionResult Index()
         {
-            if (Request.Cookies.ContainsKey("name"))
+            if (User.Identity.IsAuthenticated)
             {
-                string name = Request.Cookies["name"];
-                UploudCloud cloud = new UploudCloud();
-                return "Hello World\n";
+                return Content(User.Identity.Name);
             }
-            else
-            {
-                Response.Cookies.Append("name", "Tom");
-                UploudCloud cloud = new UploudCloud();
-                return "Hello World\n" ;
-            }
+            return Content("хуй");
         }
 
         [HttpPost]

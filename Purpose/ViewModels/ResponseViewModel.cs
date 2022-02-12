@@ -7,7 +7,7 @@ namespace Purpose.ViewModels
     public class ResponseViewModel
     {
         public bool Status { get; set; }
-        public UserFrontViewModel UserFront { get; set; }
+        public UserFrontViewModel User { get; set; }
         public List<ModelStateViewModel> Errors { get; set; }
          
         public ResponseViewModel(bool status)
@@ -17,7 +17,7 @@ namespace Purpose.ViewModels
         public ResponseViewModel(UserFrontViewModel userFront)
         {
             Status = true;
-            this.UserFront = userFront;
+            this.User = userFront;
         }
         public ResponseViewModel(List<ModelStateViewModel> errors)
         {
