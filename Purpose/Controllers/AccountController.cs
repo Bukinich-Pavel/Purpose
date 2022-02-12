@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Purpose.Models;
 using Purpose.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -66,7 +67,6 @@ namespace Purpose.Controllers
                 };
 
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);  // добавляем пользователя
-                
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user, false);  // установка куки
@@ -74,15 +74,25 @@ namespace Purpose.Controllers
 
                     var userFront = new UserFrontViewModel(user);
                     return Json(new ResponseViewModel(userFront));
-                    //return Json(new UserFrontViewModel(user));
                 }
                 Response.StatusCode = 401;
-                return Json(new ResponseViewModel(result.Errors));
-                //return Json(result.Errors);
+
+                // Create Error from DB
+                var errorFromDB = new ModelStateViewModel("Error login", "This email already exists or the password is incorrect");
+                return Json(new ResponseViewModel(errorFromDB));
             }
 
+            #region Create ogj ModelStateVM for send to Front and add errors
+            List<ModelStateViewModel> modelStateViewModel = new List<ModelStateViewModel>();
+            foreach (var item in ModelState)
+            {
+                ModelStateViewModel ms = new ModelStateViewModel(item.Key, item.Value.Errors[0].ErrorMessage);
+                modelStateViewModel.Add(ms);
+            }
+            #endregion
+
             Response.StatusCode = 401;
-            return Json(ModelState);
+            return Json(new ResponseViewModel(modelStateViewModel));
 
         }
     }

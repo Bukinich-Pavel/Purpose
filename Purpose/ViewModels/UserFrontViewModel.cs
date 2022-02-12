@@ -10,7 +10,6 @@ namespace Purpose.ViewModels
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public int? Year { get; set; }
-        public string PasswordHash { get; set; }
         public string Photo { get; set; }
 
         public UserFrontViewModel(User user)
@@ -21,7 +20,6 @@ namespace Purpose.ViewModels
             FirstName = user.FirstName;
             SecondName = user.SecondName;
             Year = user.Year;
-            PasswordHash = user.PasswordHash;
             Photo = user.Photo;
         }
     }

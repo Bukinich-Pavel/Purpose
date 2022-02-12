@@ -8,7 +8,7 @@ namespace Purpose.ViewModels
     {
         public bool Status { get; set; }
         public UserFrontViewModel UserFront { get; set; }
-        public IEnumerable<IdentityError> Errors { get; set; }
+        public List<ModelStateViewModel> Errors { get; set; }
          
         public ResponseViewModel(bool status)
         {
@@ -19,10 +19,16 @@ namespace Purpose.ViewModels
             Status = true;
             this.UserFront = userFront;
         }
-        public ResponseViewModel(IEnumerable<IdentityError> errors)
+        public ResponseViewModel(List<ModelStateViewModel> errors)
         {
             Status = false;
             this.Errors = errors;
+        }
+        public ResponseViewModel(ModelStateViewModel error)
+        {
+            Status = false;
+            this.Errors = new List<ModelStateViewModel>();
+            this.Errors.Add(error);
         }
     }
 }
