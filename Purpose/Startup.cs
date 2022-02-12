@@ -23,7 +23,18 @@ namespace Purpose
         {
             Configuration = configuration;
         }
-
+        private void CheckSameSite(HttpContext httpContext, CookieOptions options)
+        {
+            options.SameSite = SameSiteMode.None;
+            //if (options.SameSite == SameSiteMode.None)
+            //{
+            //    var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+            //    if (SameSite.BrowserDetection.DisallowsSameSiteNone(userAgent))
+            //    {
+            //        options.SameSite = SameSiteMode.Unspecified;
+            //    }
+            //}
+        }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -33,7 +44,15 @@ namespace Purpose
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.Cookie.IsEssential = true;
                 });
-
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.OnAppendCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+                options.OnDeleteCookie = cookieContext =>
+                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            });
             services.AddCors();
 
             services.AddSignalR();
@@ -61,7 +80,7 @@ namespace Purpose
             app.UseRouting();
 
             app.UseCors(builder => builder.AllowAnyOrigin());  // подключаем CORS
-
+            app.UseCookiePolicy();
             app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
 
