@@ -49,6 +49,7 @@ namespace Purpose.Controllers
         [HttpPost]
         public async Task<JsonResult> Register([FromBody] RegisterViewModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 var nickName = model.Email.Substring(0, model.Email.IndexOf('@') + 1);
@@ -70,17 +71,18 @@ namespace Purpose.Controllers
                 {
                     await signInManager.SignInAsync(user, false);  // установка куки
                     Response.StatusCode = 200;
-                    return Json(new ResponseViewModel(new UserFrontViewModel(user)));
+
+                    var userFront = new UserFrontViewModel(user);
+                    return Json(new ResponseViewModel(userFront));
                     //return Json(new UserFrontViewModel(user));
                 }
                 Response.StatusCode = 401;
-                var respose = new ResponseViewModel(result.Errors);
-                return Json(respose);
+                return Json(new ResponseViewModel(result.Errors));
                 //return Json(result.Errors);
             }
 
             Response.StatusCode = 401;
-            return Json(ModelState.Values);
+            return Json(ModelState);
 
         }
     }

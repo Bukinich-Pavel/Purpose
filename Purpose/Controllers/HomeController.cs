@@ -11,9 +11,18 @@ namespace Purpose.Controllers
         {
             this.db = db;
         }
-        public OkResult Index()
+        public string Index()
         {
-            return new OkResult();
+            if (Request.Cookies.ContainsKey("name"))
+            {
+                string name = Request.Cookies["name"];
+                return $"Hello {name}!";
+            }
+            else
+            {
+                Response.Cookies.Append("name", "Tom");
+                return "Hello World";
+            }
         }
     }
 }
