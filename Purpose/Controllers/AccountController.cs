@@ -24,25 +24,37 @@ namespace Purpose.Controllers
         [HttpPost]
         public async Task<JsonResult> Login([FromBody] LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) // Valid Ok
             {
+                // Searche user and password chek
                 var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, false, false);
-                if (result.Succeeded)
+                if (result.Succeeded) // is Ok
                 {
+                    // Searche user in DB
                     var user = await userManager.FindByEmailAsync(model.Email);
                     Response.StatusCode = 200;
-                    return Json(new UserFrontViewModel(user));
+                    var userFront = new UserFrontViewModel(user);  //Create "User for Frontend" from "User from DB"
+                    return Json(new ResponseViewModel(userFront)); //Send User
                 }
             }
+            #region Create ogj ModelStateVM for send to Front and add errors
+            List<ModelStateViewModel> modelStateViewModel = new List<ModelStateViewModel>();
+            foreach (var item in ModelState)
+            {
+                ModelStateViewModel ms = new ModelStateViewModel(item.Key, item.Value.Errors[0].ErrorMessage);
+                modelStateViewModel.Add(ms);
+            }
+            #endregion
+
             Response.StatusCode = 401;
-            return null;
+            return Json(new ResponseViewModel(modelStateViewModel)); //Send errors
         }
 
 
         [HttpPost]
         public async Task<StatusCodeResult> Logout()
         {
-            await signInManager.SignOutAsync();  // удаляем аутентификационные куки
+            await signInManager.SignOutAsync();  // Delete cookie
             return new OkResult();
         }
 
@@ -53,8 +65,10 @@ namespace Purpose.Controllers
             
             if (ModelState.IsValid)
             {
-                var nickName = model.Email.Substring(0, model.Email.IndexOf('@') + 1);
+                //Create nickname from @mail -> {nickname}@gmail.com
+                var nickName = model.Email.Substring(0, model.Email.IndexOf('@') + 1); 
 
+                //Create User from form register
                 User user = new User
                 {
                     Email = model.Email,
@@ -66,20 +80,21 @@ namespace Purpose.Controllers
                     Photo = model.Photo
                 };
 
-                IdentityResult result = await userManager.CreateAsync(user, model.Password);  // добавляем пользователя
-                if (result.Succeeded)
+                // Add User in DB
+                IdentityResult result = await userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded) //is Ok
                 {
-                    await signInManager.SignInAsync(user, false);  // установка куки
+                    await signInManager.SignInAsync(user, false);  // add cookie
                     Response.StatusCode = 200;
 
-                    var userFront = new UserFrontViewModel(user);
-                    return Json(new ResponseViewModel(userFront));
+                    var userFront = new UserFrontViewModel(user); //Create "User for Frontend" from "User from DB"
+                    return Json(new ResponseViewModel(userFront)); //Send User
                 }
-                Response.StatusCode = 401;
 
+                Response.StatusCode = 401;
                 // Create Error from DB
                 var errorFromDB = new ModelStateViewModel("Error login", "This email already exists or the password is incorrect");
-                return Json(new ResponseViewModel(errorFromDB));
+                return Json(new ResponseViewModel(errorFromDB)); //Send error
             }
 
             #region Create ogj ModelStateVM for send to Front and add errors
@@ -92,7 +107,7 @@ namespace Purpose.Controllers
             #endregion
 
             Response.StatusCode = 401;
-            return Json(new ResponseViewModel(modelStateViewModel));
+            return Json(new ResponseViewModel(modelStateViewModel)); //Send errors
 
         }
     }
