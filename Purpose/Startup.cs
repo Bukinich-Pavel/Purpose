@@ -25,7 +25,7 @@ namespace Purpose
         }
         private void CheckSameSite(HttpContext httpContext, CookieOptions options)
         {
-            options.SameSite = SameSiteMode.Unspecified;
+            options.SameSite = SameSiteMode.None;
             //if (options.SameSite == SameSiteMode.None)
             //{
             //    var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
