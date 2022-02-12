@@ -20,8 +20,8 @@ namespace Purpose.ViewModels
         [StringLength(20)]
         public string SecondName { get; set; }
 
-        [Range(1, 110)]
-        public int? Year { get; set; }
+        [StringLength(20)]
+        public string BirthDate { get; set; }
 
         [Required(ErrorMessage = "password address not specified")]
         [DataType(DataType.Password)]

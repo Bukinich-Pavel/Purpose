@@ -75,7 +75,7 @@ namespace Purpose.Controllers
                     UserName = model.Email,
                     FirstName = model.FirstName,
                     SecondName = model.SecondName,
-                    Year = model.Year,
+                    BirthDate = model.BirthDate,
                     NickName = model.NickName == String.Empty ? nickName : model.NickName,
                     Photo = model.Photo
                 };

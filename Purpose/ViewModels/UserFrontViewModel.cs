@@ -9,7 +9,7 @@ namespace Purpose.ViewModels
         public string NickName { get; set; }
         public string FirstName { get; set; }
         public string SecondName { get; set; }
-        public int? Year { get; set; }
+        public string BirthDate { get; set; }
         public string Photo { get; set; }
 
         public UserFrontViewModel(User user)
@@ -19,7 +19,7 @@ namespace Purpose.ViewModels
             NickName = user.NickName;
             FirstName = user.FirstName;
             SecondName = user.SecondName;
-            Year = user.Year;
+            BirthDate = user.BirthDate;
             Photo = user.Photo;
         }
     }
