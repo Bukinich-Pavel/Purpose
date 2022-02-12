@@ -2,13 +2,13 @@
 {
     public class ModelStateViewModel
     {
-        public string NameError { get; set; }
-        public string ErrorMessage { get; set; }
+        public string Field { get; set; }
+        public string ValidationMessage { get; set; }
 
         public ModelStateViewModel(string nameError, string errorMesage)
         {
-            NameError = nameError;
-            ErrorMessage = errorMesage;
+            Field = nameError;
+            ValidationMessage = errorMesage;
         }
     }
 }

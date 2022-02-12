@@ -82,6 +82,7 @@ namespace Purpose.Controllers
 
                 // Add User in DB
                 IdentityResult result = await userManager.CreateAsync(user, model.Password);
+                
                 if (result.Succeeded) //is Ok
                 {
                     await signInManager.SignInAsync(user, false);  // add cookie
