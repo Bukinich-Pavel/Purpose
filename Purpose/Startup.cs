@@ -37,13 +37,13 @@ namespace Purpose
         //}
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.Cookie.SameSite = SameSiteMode.None;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-                    options.Cookie.IsEssential = true;
-                });
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options =>
+            //    {
+            //        options.Cookie.SameSite = SameSiteMode.None;
+            //        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            //        options.Cookie.IsEssential = true;
+            //    });
             //services.Configure<CookiePolicyOptions>(options =>
             //{
             //    options.CheckConsentNeeded = context => true;
@@ -65,6 +65,13 @@ namespace Purpose
                 opts.Password.RequireNonAlphanumeric = false;
             })
             .AddEntityFrameworkStores<ApplicationContext>();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                options.Cookie.IsEssential = true;
+            });
 
             services.AddControllers();
         }
