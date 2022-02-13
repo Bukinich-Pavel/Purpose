@@ -23,36 +23,36 @@ namespace Purpose
         {
             Configuration = configuration;
         }
-        private void CheckSameSite(HttpContext httpContext, CookieOptions options)
-        {
-            options.SameSite = SameSiteMode.None;
-            //if (options.SameSite == SameSiteMode.None)
-            //{
-            //    var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
-            //    if (SameSite.BrowserDetection.DisallowsSameSiteNone(userAgent))
-            //    {
-            //        options.SameSite = SameSiteMode.Unspecified;
-            //    }
-            //}
-        }
+        //private void CheckSameSite(HttpContext httpContext, CookieOptions options)
+        //{
+        //    options.SameSite = SameSiteMode.None;
+        //    //if (options.SameSite == SameSiteMode.None)
+        //    //{
+        //    //    var userAgent = httpContext.Request.Headers["User-Agent"].ToString();
+        //    //    if (SameSite.BrowserDetection.DisallowsSameSiteNone(userAgent))
+        //    //    {
+        //    //        options.SameSite = SameSiteMode.Unspecified;
+        //    //    }
+        //    //}
+        //}
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
                     options.Cookie.SameSite = SameSiteMode.None;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
                     options.Cookie.IsEssential = true;
                 });
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-                options.OnAppendCookie = cookieContext =>
-                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-                options.OnDeleteCookie = cookieContext =>
-                    CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
-            });
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //    options.OnAppendCookie = cookieContext =>
+            //        CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            //    options.OnDeleteCookie = cookieContext =>
+            //        CheckSameSite(cookieContext.Context, cookieContext.CookieOptions);
+            //});
             services.AddCors();
 
             services.AddSignalR();
